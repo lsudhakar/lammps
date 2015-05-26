@@ -1,0 +1,6 @@
+LAMMPS (6 Apr 2015-ICMS)
+WARNING: OMP_NUM_THREADS environment is not set. (../comm.cpp:89)
+  using 1 OpenMP thread(s) per MPI task
+units		real
+atom_style	full
+log             outputFiles/thermo.log

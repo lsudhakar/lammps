@@ -1,0 +1,29 @@
+units		real
+atom_style	full
+
+read_data	InputFiles/216.lmpsys
+    
+pair_style	lj/cut 10.0 
+pair_coeff   	1 1 0.4 3.4 
+
+timestep	1.0
+neighbor	2.0 bin
+neigh_modify	every 10 delay 0 check yes 
+
+minimize 	1.0e-4 1.0e-6 1000 10000
+
+fix 		fxnvt all nvt temp 300.0 300.0 100.0
+
+thermo_style    custom step temp pe ke etotal press
+thermo          1000  
+
+run 		50000
+dump            dmpall	all dcd	100 OutputFiles/216.dcd   
+run 		50000
+
+
+
+
+
+
+

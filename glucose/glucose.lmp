@@ -1,0 +1,35 @@
+units		real
+atom_style	full
+log             outputFiles/thermo.log
+    
+pair_style	lj/charmm/coul/long 8.0 10.0 
+bond_style   	harmonic
+angle_style     charmm
+dihedral_style  charmm
+kspace_style 	pppm 0.0001
+pair_modify  	mix arithmetic shift yes
+special_bonds   charmm
+
+read_data	inputFiles/glucose.lmpsys
+
+timestep	1.0
+neighbor	2.0 bin
+neigh_modify	every 10 delay 0 check yes 
+
+minimize 	1.0e-4 1.0e-6 1000 10000
+
+fix             fxnve all nve
+fix             fxshk all shake 1e-6 500 0 m 1.0
+
+thermo_style    custom step temp pe etotal press epair 
+thermo          1000  
+
+dump            dmpall	all dcd	100 outputFiles/glucose.dcd   
+run 		10000
+
+
+
+
+
+
+

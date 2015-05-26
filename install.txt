@@ -1,0 +1,25 @@
+run the below commands in the linux/mac terminal
+-------------------------------------------------------------
+
+lammps:
+sudo add-apt-repository ppa:gladky-anton/lammps
+sudo apt-get update 
+sudo apt-get install lammps-daily 
+-------------------------------------------------------------
+
+vmd:
+http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD
+./configure
+cd src
+sudo make install
+-------------------------------------------------------------
+
+gnuplot:
+sudo apt-get install gnuplot-x11
+
+installation from source code:
+http://sourceforge.net/projects/gnuplot/files/gnuplot/
+./configure
+make
+sudo make install
+-------------------------------------------------------------

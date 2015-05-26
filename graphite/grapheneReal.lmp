@@ -1,0 +1,36 @@
+units		real
+atom_style	full
+log             outputFiles/thermo.log
+
+read_data	inputFiles/graphene.lmpsys
+#read_data       inputFiles/grapheneBonds.lmpsys
+
+atom_modify 	sort 10 20.0
+
+pair_style 	rebo
+pair_coeff 	* * inputFiles/CH.airebo.real C 
+neighbor	2.0 bin
+neigh_modify	every 1 check yes      
+
+velocity       all create 300 1234567 mom yes rot yes dist gaussian
+
+timestep	1.0
+fix 		fxnvt all nvt temp 300.0 300.0 100.0
+#fix 		fxnve all nve
+#fix            temp all temp/berendsen 300.0 300.0 100.0
+
+variable	vpeatom equal pe/atoms
+thermo_style    custom step temp pe v_vpeatom etotal press	
+thermo          100  
+ 
+dump            dmpall all dcd 100 outputFiles/graphene.dcd   
+dump_modify 	dmpall unwrap yes
+
+run 		1000
+
+
+
+
+
+
+

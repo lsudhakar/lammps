@@ -1,0 +1,127 @@
+
+pair_style	lj/charmm/coul/long 8.0 10.0
+bond_style   	harmonic
+angle_style     charmm
+dihedral_style  charmm
+kspace_style 	pppm 0.0001
+pair_modify  	mix arithmetic shift yes
+special_bonds   charmm
+
+read_data	inputFiles/glucose.lmpsys
+  orthogonal box = (1.139 -2.177 -10.403) to (6.532 4.212 -6.141)
+  1 by 2 by 1 MPI processor grid
+  reading atoms ...
+  24 atoms
+  scanning bonds ...
+  4 = max bonds/atom
+  scanning angles ...
+  6 = max angles/atom
+  scanning dihedrals ...
+  19 = max dihedrals/atom
+  reading bonds ...
+  24 bonds
+  reading angles ...
+  42 angles
+  reading dihedrals ...
+  95 dihedrals
+  4 = max # of 1-2 neighbors
+  7 = max # of 1-3 neighbors
+  16 = max # of 1-4 neighbors
+  18 = max # of special neighbors
+
+timestep	1.0
+neighbor	2.0 bin
+neigh_modify	every 10 delay 0 check yes
+
+minimize 	1.0e-4 1.0e-6 1000 10000
+WARNING: Resetting reneighboring criteria during minimization (../min.cpp:168)
+PPPM initialization ...
+  G vector (1/distance) = 0.288743
+  grid = 4 4 4
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.0040728
+  estimated relative force accuracy = 1.22651e-05
+  using double precision FFTs
+  3d grid and FFT values/proc = 1089 32
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  master list distance cutoff = 12
+WARNING: Bond/angle/dihedral extent > half of periodic box length (../domain.cpp:803)
+Memory usage per processor = 15.5127 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0    527564.02     42.50273    527606.52 9.8577818e+08 
+      33            0    61.210019    107.21305    168.42307    190520.85 
+WARNING: Bond/angle/dihedral extent > half of periodic box length (../domain.cpp:803)
+
+Loop time of 0.034225 on 2 procs for 33 steps with 24 atoms
+99.3% CPU use with 2 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = linesearch alpha is zero
+  Energy initial, next-to-last, final = 
+         527606.517926      165.642287708      168.423073515
+  Force two-norm initial, final = 1.03025e+07 50.286
+  Force max component initial, final = 5.03059e+06 16.2912
+  Final line search alpha, max atom move = 2.60279e-12 4.24025e-11
+  Iterations, force evaluations = 33 111
+
+MPI task timings breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.019555   | 0.020812   | 0.02207    |   0.9 | 60.81
+Bond    | 0.00072479 | 0.00090098 | 0.0010772  |   0.6 |  2.63
+Kspace  | 0.005857   | 0.0068853  | 0.0079136  |   1.2 | 20.12
+Neigh   | 0.0010757  | 0.0010849  | 0.0010941  |   0.0 |  3.17
+Comm    | 0.0037916  | 0.0038373  | 0.0038831  |   0.1 | 11.21
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.0007041  |            |       |  2.06
+
+Nlocal:    12 ave 14 max 10 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:    3673 ave 3711 max 3635 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Neighs:    7121.5 ave 8461 max 5782 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 14243
+Ave neighs/atom = 593.458
+Ave special neighs/atom = 10.75
+Neighbor list builds = 2
+Dangerous builds = 0
+
+fix             fxnve all nve
+fix             fxshk all shake 1e-6 500 0 m 1.0
+  10 = # of size 2 clusters
+  1 = # of size 3 clusters
+  0 = # of size 4 clusters
+  0 = # of frozen angles
+
+thermo_style    custom step temp pe etotal press epair
+thermo          1000
+
+dump            dmpall	all dcd	100 outputFiles/glucose.dcd
+run 		10000
+PPPM initialization ...
+  G vector (1/distance) = 0.288743
+  grid = 4 4 4
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.0040728
+  estimated relative force accuracy = 1.22651e-05
+  using double precision FFTs
+  3d grid and FFT values/proc = 1089 32
+Neighbor list info ...
+  1 neighbor list requests
+  update every 10 steps, delay 0 steps, check yes
+  master list distance cutoff = 12
+WARNING: Bond/angle/dihedral extent > half of periodic box length (../domain.cpp:803)
+Memory usage per processor = 15.2783 Mbytes
+Step Temp PotEng TotEng Press E_pair 
+      33            0     167.2274     167.2274    204905.42    61.210019 
+    1000    389.40397    169.22407    191.27812    227100.21    84.159865 
+    2000    439.96305    166.34374    191.26122    179227.27    72.598343 
+    3000    310.17131    173.77131    191.33799     197103.7    75.427601 
+    4000    1128.2627    214.82877    278.72836    266593.35    108.56999 
+    5000     984.0398    198.74707    254.47854    192054.97    91.707262 
+    6000    760.11685    187.04294    230.09246    317273.11     74.19649 

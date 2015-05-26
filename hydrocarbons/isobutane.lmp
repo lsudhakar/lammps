@@ -1,0 +1,34 @@
+units		real
+atom_style	full
+log             outputFiles/thermo.log
+
+read_data	inputFiles/isobutane.lmpsys
+    
+pair_style	lj/cut/coul/long 10.0 10.0 
+bond_style   	harmonic
+angle_style  	harmonic
+dihedral_style  opls
+kspace_style 	pppm 0.0001
+pair_modify     mix geometric tail yes
+special_bonds	lj/coul 0.0 0.0 0.5  # OPLS considers 1-4 interactions with 50%. 
+
+pair_coeff	1 1 0.066 3.5	# CT
+pair_coeff   	2 2 0.03  2.5	# HC
+bond_coeff   	1 268.0 1.529	# CT-CT
+bond_coeff   	2 340.0 1.09	# CT-HC
+angle_coeff  	1 58.35 112.7    # CT-CT-CT
+angle_coeff  	2 37.5  110.7    # CT-CT-HC
+angle_coeff  	3 33.0  107.8    # HC-CT-HC
+dihedral_coeff 	1 0.000 0.000 0.366 0.000 # CT-CT-CT-HC
+dihedral_coeff 	2 0.000 0.000 0.318 0.000 # HC-CT-CT-HC
+
+minimize 	1.0e-4 1.0e-6 1000 10000
+
+fix 		fxnvt all nvt temp 300.0 300.0 100.0
+
+thermo_style    custom step temp pe etotal press epair 
+thermo          1000  
+
+dump            dmpall all dcd 100 outputFiles/isobutane.dcd   
+run 		10000
+

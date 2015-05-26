@@ -1,0 +1,28 @@
+1. inspect the system
+
+cd inputFiles
+vmd > Extensions > TkConsole
+topo readlammpsdata atomic.lmpsys
+cd ..
+
+----------------------------------------
+
+2. run the simulation 
+
+mpirun -np 2 lammps < atomic.lmp
+
+----------------------------------------
+
+3. visualize the trajectory
+
+vmd inputFiles/atomic.psf outputFiles/atomic.dcd
+
+----------------------------------------
+
+4. analyse and plot
+
+cd analysis
+vmd -dispdev text -e rdf.tcl
+./plot.gp
+
+----------------------------------------

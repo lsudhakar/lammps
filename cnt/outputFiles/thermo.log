@@ -1,0 +1,88 @@
+
+read_data	inputFiles/cnt.lmpsys
+  orthogonal box = (-50 -50 -0.614011) to (50 50 41.1388)
+  2 by 2 by 1 MPI processor grid
+  reading atoms ...
+  1360 atoms
+  0 = max # of 1-2 neighbors
+  0 = max # of 1-3 neighbors
+  0 = max # of 1-4 neighbors
+  1 = max # of special neighbors
+#read_data       inputFiles/cntBonds.lmpsys
+
+atom_modify 	sort 10 20.0
+
+pair_style 	rebo
+pair_coeff 	* * inputFiles/CH.airebo.real C
+neighbor	2.0 bin
+neigh_modify	every 1 check yes
+
+velocity       all create 300 1234567 mom yes rot yes dist gaussian
+
+timestep	1.0
+fix 		fxnvt all nvt temp 300.0 300.0 100.0
+#fix 		fxnve all nve
+#fix            temp all temp/berendsen 300.0 300.0 100.0
+
+variable	vpeatom equal pe/atoms
+thermo_style    custom step temp pe v_vpeatom etotal press
+thermo          100
+
+dump            dmpall all dcd 100 outputFiles/cnt.dcd
+dump_modify 	dmpall unwrap yes
+
+run 		1000
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 10 steps, check yes
+  master list distance cutoff = 8
+Memory usage per processor = 5.72905 Mbytes
+Step Temp PotEng vpeatom TotEng Press 
+       0          300   -244106.51   -179.49008   -242891.23   -2964.8796 
+     100    249.30344   -243776.53   -179.24745   -242766.62    -1256.448 
+     200    190.30809   -243359.19   -178.94058   -242588.27    984.75448 
+     300    271.83286    -243484.7   -179.03287   -242383.52   -1032.3546 
+     400    223.09462   -243099.62   -178.74972   -242195.88   -3230.6171 
+     500    325.93397   -243314.29   -178.90756   -241993.95    -1476.051 
+     600    266.14504   -243050.58   -178.71366   -241972.45    982.92517 
+     700    330.70226   -243221.89   -178.83962   -241882.24   -993.40591 
+     800    275.83215    -242980.5   -178.66213   -241863.13   -2888.5274 
+     900    355.10369   -243271.73   -178.87627   -241833.24   -1253.9872 
+    1000    277.96359   -243140.83   -178.78002   -242014.82   -160.77774 
+
+Loop time of 1.48292 on 4 procs for 1000 steps with 1360 atoms
+99.8% CPU use with 4 MPI tasks x 1 OpenMP threads
+Performance: 58.263 ns/day  0.412 hours/ns  674.346 timesteps/s
+
+MPI task timings breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 1.2721     | 1.3506     | 1.4039     |   4.5 | 91.08
+Bond    | 9.5129e-05 | 0.000103   | 0.00010896 |   0.1 |  0.01
+Neigh   | 0.0049422  | 0.0051403  | 0.0055702  |   0.4 |  0.35
+Comm    | 0.058931   | 0.11237    | 0.18997    |  15.5 |  7.58
+Output  | 0.0013387  | 0.0013576  | 0.0014119  |   0.1 |  0.09
+Modify  | 0.0086169  | 0.0097404  | 0.010708   |   0.8 |  0.66
+Other   |            | 0.003595   |            |       |  0.24
+
+Nlocal:    340 ave 357 max 323 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+Nghost:    521.5 ave 534 max 515 min
+Histogram: 1 1 1 0 0 0 0 0 0 1
+Neighs:    0 ave 0 max 0 min
+Histogram: 4 0 0 0 0 0 0 0 0 0
+FullNghs:  26575 ave 27937 max 25236 min
+Histogram: 2 0 0 0 0 0 0 0 0 2
+
+Total # of neighbors = 106300
+Ave neighs/atom = 78.1618
+Ave special neighs/atom = 0
+Neighbor list builds = 4
+Dangerous builds = 0
+
+
+
+
+
+
+

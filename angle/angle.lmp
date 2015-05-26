@@ -1,0 +1,25 @@
+units		real
+atom_style	full
+log             outputFiles/thermo.log
+
+read_data	inputFiles/angle.lmpsys
+    
+pair_style	lj/cut 10.0 
+angle_style  	harmonic
+special_bonds   charmm
+
+pair_coeff   	* * 0.0 3.5	# A
+angle_coeff  	1 1000.0 60.0	# A-A-A
+
+velocity 	all create 300.0 7654321
+
+minimize 	1.0e-4 1.0e-6 1000 10000
+
+fix 		fxnvt all nvt temp 300.0 300.0 100.0
+
+thermo_style    multi
+thermo          1000  
+
+dump            dmpdcd	all dcd	100 outputFiles/angle.dcd   
+
+run 		100000

@@ -1,0 +1,164 @@
+
+read_data	inputFiles/propane.lmpsys
+  orthogonal box = (-9.8453 -9.84709 -8.42237) to (9.9943 10.0849 8.32183)
+  1 by 2 by 1 MPI processor grid
+  reading atoms ...
+  396 atoms
+  scanning bonds ...
+  4 = max bonds/atom
+  scanning angles ...
+  6 = max angles/atom
+  scanning dihedrals ...
+  9 = max dihedrals/atom
+  reading bonds ...
+  360 bonds
+  reading angles ...
+  648 angles
+  reading dihedrals ...
+  648 dihedrals
+  4 = max # of 1-2 neighbors
+  6 = max # of 1-3 neighbors
+  9 = max # of 1-4 neighbors
+  10 = max # of special neighbors
+
+pair_style	lj/cut/coul/long 10.0 10.0
+bond_style   	harmonic
+angle_style  	harmonic
+dihedral_style  opls
+kspace_style 	pppm 0.0001
+pair_modify     mix geometric tail yes
+special_bonds	lj/coul 0.0 0.0 0.5  # OPLS considers 1-4 interactions with 50%.
+  4 = max # of 1-2 neighbors
+  6 = max # of 1-3 neighbors
+  9 = max # of 1-4 neighbors
+  10 = max # of special neighbors
+
+pair_coeff	1 1 0.066 3.5	# CT
+pair_coeff   	2 2 0.03  2.5	# HC
+bond_coeff   	1 268.0 1.529	# CT-CT
+bond_coeff   	2 340.0 1.09	# CT-HC
+angle_coeff  	1 58.35 112.7    # CT-CT-CT
+angle_coeff  	2 37.5  110.7    # CT-CT-HC
+angle_coeff  	3 33.0  107.8    # HC-CT-HC
+dihedral_coeff 	1 0.000 0.000 0.366 0.000 # CT-CT-CT-HC
+dihedral_coeff 	2 0.000 0.000 0.318 0.000 # HC-CT-CT-HC
+
+minimize 	1.0e-4 1.0e-6 1000 10000
+WARNING: Resetting reneighboring criteria during minimization (../min.cpp:168)
+PPPM initialization ...
+  G vector (1/distance) = 0.214412
+  grid = 6 6 5
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.00718805
+  estimated relative force accuracy = 2.16466e-05
+  using double precision FFTs
+  3d grid and FFT values/proc = 880 108
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  master list distance cutoff = 12
+Memory usage per processor = 11.9515 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0   -5.2362544    142.46854    137.23229   -18938.042 
+      47            0   -3.5684192    4.6733635    1.1049443   -1626.6091 
+
+Loop time of 0.498195 on 2 procs for 47 steps with 396 atoms
+99.8% CPU use with 2 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+         137.232285058      1.10500520084      1.10494433781
+  Force two-norm initial, final = 402.073 1.00452
+  Force max component initial, final = 23.9766 0.0882615
+  Final line search alpha, max atom move = 0.125 0.0110327
+  Iterations, force evaluations = 47 212
+
+MPI task timings breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.28835    | 0.33093    | 0.37351    |   7.4 | 66.43
+Bond    | 0.033561   | 0.047426   | 0.06129    |   6.4 |  9.52
+Kspace  | 0.04906    | 0.10541    | 0.16176    |  17.4 | 21.16
+Neigh   | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.011507   | 0.011551   | 0.011595   |   0.0 |  2.32
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.002882   |            |       |  0.58
+
+Nlocal:    198 ave 216 max 180 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:    3204 ave 3313 max 3095 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Neighs:    42714 ave 47521 max 37907 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 85428
+Ave neighs/atom = 215.727
+Ave special neighs/atom = 8.36364
+Neighbor list builds = 0
+Dangerous builds = 0
+
+fix 		fxnvt all nvt temp 300.0 300.0 100.0
+
+thermo_style    custom step temp pe etotal press epair
+thermo          1000
+
+dump            dmpall all dcd 100 outputFiles/propane.dcd
+run 		10000
+PPPM initialization ...
+  G vector (1/distance) = 0.214412
+  grid = 6 6 5
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.00718805
+  estimated relative force accuracy = 2.16466e-05
+  using double precision FFTs
+  3d grid and FFT values/proc = 880 108
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 10 steps, check yes
+  master list distance cutoff = 12
+Memory usage per processor = 10.8463 Mbytes
+Step Temp PotEng TotEng Press E_pair 
+      47            0    1.1049443    1.1049443   -1626.6091   -3.5684192 
+    1000    25.802296    2.1367563    32.516895     -1163.53   -2.5337537 
+    2000    339.28977    155.73651    555.22306   -1766.0863     4.025518 
+    3000    298.40388    209.20404    560.55073    1138.6158    21.828787 
+    4000    286.90529    233.28129    571.08931    244.35808    13.865727 
+    5000    290.48505    231.57111    573.59401    788.05442    8.6471351 
+    6000    289.17935     250.1604    590.64594    255.01212    9.0152778 
+    7000      301.221    263.48949    618.15311    2306.6812     8.280766 
+    8000    290.87358     258.3552    600.83556    817.96932    9.8944035 
+    9000    296.19342    265.37207    614.11612   -3436.6833    8.1516294 
+   10000    307.42027    283.03085    644.99361    158.10549    1.2427864 
+   10047    306.68769    276.16794    637.26815   -693.33279    2.7914551 
+
+Loop time of 19.477 on 2 procs for 10000 steps with 396 atoms
+99.8% CPU use with 2 MPI tasks x 1 OpenMP threads
+Performance: 44.360 ns/day  0.541 hours/ns  513.425 timesteps/s
+
+MPI task timings breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 11.994     | 12.348     | 12.703     |  10.1 | 63.40
+Bond    | 2.254      | 2.3291     | 2.4041     |   4.9 | 11.96
+Kspace  | 2.5845     | 3.0054     | 3.4263     |  24.3 | 15.43
+Neigh   | 0.95854    | 0.95877    | 0.959      |   0.0 |  4.92
+Comm    | 0.64952    | 0.65713    | 0.66474    |   0.9 |  3.37
+Output  | 0.0073736  | 0.010505   | 0.013637   |   3.1 |  0.05
+Modify  | 0.098449   | 0.098894   | 0.099339   |   0.1 |  0.51
+Other   |            | 0.06903    |            |       |  0.35
+
+Nlocal:    198 ave 200 max 196 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Nghost:    3388 ave 3403 max 3373 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+Neighs:    42589.5 ave 44142 max 41037 min
+Histogram: 1 0 0 0 0 0 0 0 0 1
+
+Total # of neighbors = 85179
+Ave neighs/atom = 215.098
+Ave special neighs/atom = 8.36364
+Neighbor list builds = 347
+Dangerous builds = 0
+

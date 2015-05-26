@@ -1,0 +1,34 @@
+units		metal
+atom_style	full
+log             outputFiles/thermo.log
+
+read_data       inputFiles/cnt.lmpsys
+#read_data       inputFiles/cntBonds.lmpsys
+
+pair_style 	rebo
+pair_coeff      * * inputFiles/CH.airebo.metal C
+neighbor	2.0 bin
+neigh_modify	every 1 check yes      
+
+velocity        all create 300 1234567 mom yes rot yes dist gaussian
+
+timestep	0.001
+#fix 		fxnvt all nvt temp 300.0 300.0 1.0
+fix 		fxnve all nve
+fix             temp all temp/berendsen 300 300 0.1
+
+variable	vpeatom equal pe/atoms
+thermo_style    custom step temp pe v_vpeatom etotal press	
+thermo          100  
+
+dump            dmpall all dcd 100 outputFiles/cnt.dcd   
+dump_modify 	dmpall unwrap yes
+ 
+run 		1000
+
+
+
+
+
+
+

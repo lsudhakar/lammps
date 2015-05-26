@@ -1,0 +1,30 @@
+# VMD for LINUX, version 1.9.2 (December 29, 2014)
+# Log file '/home/sridhar/toolBox/lammps/myTutorials/vmd/sio2.txt', created by user sridhar
+mol delete 11
+animate style Loop
+mol rename 15 {ASiO215}
+display resetview
+display resetview
+mol addrep 16
+display resetview
+mol new {/usr/local/lib/vmd/plugins/noarch/tcl/inorganicbuilder0.1/materials/asio2.pdb} type {pdb} first 0 last -1 step 1 waitfor -1 autobonds 0
+animate style Loop
+mol off 16
+mol delete 16
+mol addrep 17
+display resetview
+mol new {/home/sridhar/toolBox/lammps/myTutorials/vmd/ASiO2.psf} type {psf} first 0 last -1 step 1 waitfor -1 autobonds 0
+animate style Loop
+display resetview
+mol addfile {/home/sridhar/toolBox/lammps/myTutorials/vmd/ASiO2.pdb} type {pdb} first 0 last -1 step 1 waitfor -1 autobonds 0 17
+animate style Loop
+animate write psf {ASiO2.psf} beg 0 end 0 skip 1 17
+animate write pdb {ASiO2.pdb} beg 0 end 0 skip 1 17
+mol delete 17
+mol addrep 18
+display resetview
+mol new {/home/sridhar/toolBox/lammps/myTutorials/vmd/ASiO2.psf} type {psf} first 0 last -1 step 1 waitfor -1 autobonds 0
+animate style Loop
+display resetview
+mol addfile {/home/sridhar/toolBox/lammps/myTutorials/vmd/ASiO2.pdb} type {pdb} first 0 last -1 step 1 waitfor -1 autobonds 0 18
+animate style Loop

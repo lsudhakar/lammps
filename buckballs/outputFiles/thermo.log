@@ -1,0 +1,172 @@
+
+read_data       InputFiles/buckyballs.lmpsys
+  orthogonal box = (0 0 0) to (26 26 26)
+  1 by 2 by 2 MPI processor grid
+  reading atoms ...
+  1656 atoms
+  scanning bonds ...
+  3 = max bonds/atom
+  scanning angles ...
+  3 = max angles/atom
+  scanning dihedrals ...
+  12 = max dihedrals/atom
+  reading bonds ...
+  1204 bonds
+  reading angles ...
+  872 angles
+  reading dihedrals ...
+  720 dihedrals
+  3 = max # of 1-2 neighbors
+  6 = max # of 1-3 neighbors
+  18 = max # of 1-4 neighbors
+  17 = max # of special neighbors
+group           prot type 1
+120 atoms in group prot
+group           water type 2 3
+1536 atoms in group water
+
+pair_style      lj/charmm/coul/long 8.0 10.0
+bond_style      harmonic
+angle_style     harmonic
+special_bonds   charmm
+kspace_style    pppm 0.0001
+pair_modify     mix arithmetic shift yes
+
+bond_coeff      1 1000.0 1.0
+angle_coeff     1 1000.0 109.47
+pair_coeff      1 1 0.05564 3.4     # c
+pair_coeff      2 2 0.15535 3.166   # o
+pair_coeff      3 3 0.0     2.058   # h
+pair_coeff      1 2 0.09369 3.19    # werder carbon-oxygen
+
+timestep        2.0
+neighbor        2.0 bin
+neigh_modify    every 1 delay 0 check yes
+neigh_modify    exclude group prot prot
+
+
+fix             fxcnt prot setforce 0.0 0.0 0.0
+minimize        1.0e-4 1.0e-6 1000 10000
+PPPM initialization ...
+  G vector (1/distance) = 0.272998
+  grid = 15 15 15
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.0170501
+  estimated relative force accuracy = 5.13458e-05
+  using double precision FFTs
+  3d grid and FFT values/proc = 4312 960
+WARNING: Neighbor exclusions used with KSpace solver may give inconsistent Coulombic energies (../neighbor.cpp:436)
+Neighbor list info ...
+  1 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  master list distance cutoff = 12
+Memory usage per processor = 12.8889 Mbytes
+Step Temp E_pair E_mol TotEng Press 
+       0            0 7.0858454e+08    47832.012 7.0863238e+08 1.1057618e+10 
+     114            0    -5857.177    38055.239    32198.062   -271887.82 
+
+Loop time of 1.00225 on 4 procs for 114 steps with 1656 atoms
+100.0% CPU use with 4 MPI tasks x 1 OpenMP threads
+
+Minimization stats:
+  Stopping criterion = energy tolerance
+  Energy initial, next-to-last, final = 
+         708632375.036      32201.2325211      32198.0615753
+  Force two-norm initial, final = 9.74997e+09 190.2
+  Force max component initial, final = 7.16367e+09 33.1551
+  Final line search alpha, max atom move = 0.00206817 0.0685704
+  Iterations, force evaluations = 114 190
+
+MPI task timings breakdown:
+Section |  min time  |  avg time  |  max time  |%varavg| %total
+---------------------------------------------------------------
+Pair    | 0.69923    | 0.73846    | 0.82086    |   5.7 | 73.68
+Bond    | 0.0035648  | 0.0051283  | 0.0068111  |   2.2 |  0.51
+Kspace  | 0.10364    | 0.18741    | 0.22822    |  11.4 | 18.70
+Neigh   | 0.04367    | 0.043683   | 0.043696   |   0.0 |  4.36
+Comm    | 0.021127   | 0.021274   | 0.021428   |   0.1 |  2.12
+Output  | 0          | 0          | 0          |   0.0 |  0.00
+Modify  | 0.00022507 | 0.00025362 | 0.00028658 |   0.2 |  0.03
+Other   |            | 0.00604    |            |       |  0.60
+
+Nlocal:    414 ave 429 max 394 min
+Histogram: 1 0 0 0 1 0 0 0 1 1
+Nghost:    6182 ave 6262 max 6099 min
+Histogram: 1 1 0 0 0 0 0 0 0 2
+Neighs:    140448 ave 154248 max 129962 min
+Histogram: 1 0 1 0 0 1 0 0 0 1
+
+Total # of neighbors = 561791
+Ave neighs/atom = 339.246
+Ave special neighs/atom = 3.08696
+Neighbor list builds = 5
+Dangerous builds = 0
+reset_timestep  0
+unfix		fxcnt
+
+velocity        all create 298.0 1234567
+
+fix             fxshk water shake 0.0001 20 0 b 1 a 1
+  0 = # of size 2 clusters
+  0 = # of size 3 clusters
+  0 = # of size 4 clusters
+  512 = # of frozen angles
+fix             fxnvt water nvt temp 298.0 298.0 100.0
+fix             fxprot prot rigid/nvt molecule temp 298.0 298.0 100.0
+2 rigid bodies with 120 atoms
+
+compute         wTemp water temp
+compute         wPe water group/group water kspace yes
+thermo_style    custom step temp pe ke etotal c_wTemp c_wPe
+thermo          1000
+
+dump            dmpall all dcd 100 OutputFiles/buckyballs.dcd
+run             1000000
+PPPM initialization ...
+  G vector (1/distance) = 0.272998
+  grid = 15 15 15
+  stencil order = 5
+  estimated absolute RMS force accuracy = 0.0170501
+  estimated relative force accuracy = 5.13458e-05
+  using double precision FFTs
+  3d grid and FFT values/proc = 4312 960
+WARNING: Neighbor exclusions used with KSpace solver may give inconsistent Coulombic energies (../neighbor.cpp:436)
+Neighbor list info ...
+  2 neighbor list requests
+  update every 1 steps, delay 0 steps, check yes
+  master list distance cutoff = 12
+Memory usage per processor = 13.2017 Mbytes
+Step Temp PotEng KinEng TotEng wTemp wPe 
+       0    445.74623    32088.957    1364.5593    33453.516     445.7156   -5787.5389 
+    1000    293.97888    32637.461    899.95517    33537.416    293.50209   -5248.9596 
+    2000    297.93164    32602.338    912.05573    33514.394    298.26017   -5280.5293 
+    3000    305.12838    32654.227    934.08704    33588.314    306.01526   -5229.4554 
+    4000    288.02934    32624.444    881.74188    33506.186    288.37195   -5253.5257 
+    5000    287.44659    32575.435    879.95791    33455.393    287.38964   -5306.6236 
+    6000    309.21383    32605.617    946.59381     33552.21    308.50853   -5271.7695 
+    7000    300.61325    32607.686    920.26492    33527.951    300.59895   -5272.5126 
+    8000    294.57407    32640.021    901.77722    33541.798    294.94839   -5241.1653 
+    9000     298.7738    32561.377    914.63382    33476.011    299.30091   -5321.1668 
+   10000    290.96176    32575.742    890.71888    33466.461    291.25838   -5305.1614 
+   11000    295.63752    32636.495    905.03275    33541.528    296.09003   -5244.0807 
+   12000    288.63674    32613.648    883.60132    33497.249    288.66637   -5262.9519 
+   13000    302.62142    32642.026    926.41251    33568.439    302.99773   -5239.6723 
+   14000    291.07572    32623.482    891.06775     33514.55    291.57473    -5261.491 
+   15000    294.78871     32648.89     902.4343    33551.325    295.16858   -5231.8025 
+   16000    294.38364    32567.042    901.19425    33468.236    294.44569   -5312.5378 
+   17000    308.57731     32611.66    944.64524    33556.305    308.54436   -5266.8261 
+   18000     295.4114    32569.442    904.34053    33473.783    295.84021   -5308.0512 
+   19000    296.95113    32609.808    909.05408    33518.862    297.54896   -5265.8013 
+   20000    298.43268    32555.957    913.58954    33469.547    298.18239   -5320.2391 
+   21000    288.47754    32633.312    883.11397    33516.426    288.95266   -5245.8959 
+   22000    289.94298    32588.677     887.6001    33476.277    289.52617   -5291.6602 
+   23000    297.78449    32640.368    911.60526    33551.973    297.31545   -5236.4082 
+   24000    284.26283      32641.3     870.2115    33511.511    284.17559   -5239.0467 
+   25000    298.66242    32637.806    914.29286    33552.099    298.96602   -5241.0857 
+   26000    303.32505    32643.967    928.56653    33572.533     303.9009    -5236.865 
+   27000    305.64194    32589.222    935.65919    33524.882    305.79102   -5291.1137 
+   28000    290.37315    32586.953    888.91699     33475.87       290.31   -5292.6518 
+   29000    299.94747    32605.406    918.22678    33523.632    299.73397    -5271.983 
+   30000    299.65383    32604.902    917.32785     33522.23     300.0295   -5276.7322 
+   31000    299.93701      32631.8    918.19473    33549.994    300.16006   -5253.0691 
+   32000    311.25596    3
