@@ -1,6 +1,6 @@
 1. inspect the system
 
-cd inputFiles
+cd atomic/inputFiles
 vmd > Extensions > TkConsole
 topo readlammpsdata atomic.lmpsys
 cd ..
